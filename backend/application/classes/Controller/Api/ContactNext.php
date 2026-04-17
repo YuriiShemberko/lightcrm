@@ -4,9 +4,9 @@ class Controller_Api_ContactNext extends Controller_Api_Core_Rest
 {
     public function action_post()
     {
-        $next_contact = ORM::factory('Contact')->get_next();
+        $next_contact = Service_ContactNext::getNextContact();
         
-        return $this->send_response(200, [
+        return $this->sendResponse(200, [
             'success' => true,
             'data' => $next_contact ? $next_contact->as_array() : null
         ]);

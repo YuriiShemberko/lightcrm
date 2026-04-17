@@ -19,7 +19,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
 
             $user = Service_Auth::login($login_params);
 
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
                     'id' => $user['id'],
@@ -28,7 +28,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
             ]);
 
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+            return $this->sendResponse($e->getCode(), array('error' => $e->getMessage()));
         }
     }
 
@@ -42,13 +42,13 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
             Validation_RequestMethod::validate($this->request->method(), ['POST']);
             Service_Auth::logout();
 
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'message' => 'Logged out successfully'
             ]);
         
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+            return $this->sendResponse($e->getCode(), array('error' => $e->getMessage()));
         }
     }
 
@@ -61,7 +61,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
         try {
             $user = Service_Auth::getCurrentUser();
     
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
                     'id' => $user['id'],
@@ -70,7 +70,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
             ]);
 
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+            return $this->sendResponse($e->getCode(), array('error' => $e->getMessage()));
         }
     }
 }

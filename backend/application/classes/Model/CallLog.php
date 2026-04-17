@@ -21,23 +21,27 @@ class Model_CallLog extends ORM {
         return $this->id;
     }
 
-    public function get_paged($pagination, $filters)
+    public function getPaged($pagination, $filters)
     {
         $page = $pagination['page'] ?? 1;
         $limit = $pagination['per_page'] ?? 10;
 
-        $filtered_items = (clone $this)->with('contact');
+        $filtered_items = ORM::factory($this->_object_name)->with('contact');
         foreach ($filters as $field => $value) {
             $filtered_items->where($field, '=', $value);
         }
 
-        $total = (clone $filtered_items)->count_all();
+        $total_items = ORM::factory($this->_object_name)->with('contact');
+        foreach ($filters as $field => $value) {
+            $total_items->where($field, '=', $value);
+        }
+        $total = $total_items->count_all();
 
         $items = $filtered_items
-                    ->limit($limit)
-                    ->offset(($page - 1) * $limit)
-                    ->order_by('called_at', 'DESC')
-                    ->find_all();
+            ->limit($limit)
+            ->offset(($page - 1) * $limit)
+            ->order_by('created_at', 'DESC')
+            ->find_all();
 
         $data = [];
         foreach ($items as $item) {

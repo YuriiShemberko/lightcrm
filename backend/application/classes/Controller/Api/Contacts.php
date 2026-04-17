@@ -7,12 +7,12 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
         try {
             $pagination = Validation_Pagination::validate($this->request->query());
             $filters = Validation_Contact_Filters::validate($this->request->query());
-            $result = ORM::factory('Contact')->get_paged(
+            $result = ORM::factory('Contact')->getPaged(
                 $pagination,
                 $filters,
             );
             
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
                     'items' => $result['items'],
@@ -25,7 +25,7 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
             ]);
 
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), [
+            return $this->sendResponse($e->getCode(), [
                 'success' => false, 
                 'errors'  => $e->getMessage()
             ]);
@@ -37,12 +37,12 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
         try {
             $data = json_decode($this->request->body(), true);
             $validated = Validation_Contact_Params::validate($data);
-            $new_id = ORM::factory('Contact')->create_contact($validated['name'], $validated['phone']);
+            $new_id = ORM::factory('Contact')->createContact($validated['name'], $validated['phone']);
             
-            return $this->send_response(201, ['success' => true, 'id' => $new_id]);
+            return $this->sendResponse(201, ['success' => true, 'id' => $new_id]);
 
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), [
+            return $this->sendResponse($e->getCode(), [
                 'success' => false, 
                 'errors'  => $e->getMessage()
             ]);

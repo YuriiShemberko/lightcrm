@@ -6,7 +6,7 @@ class Service_Auth {
         $login = $login_params['login'];
         $password = $login_params['password'];
 
-        $user = Model::factory('User')->get_by_login($login);
+        $user = Model::factory('User')->getByLogin($login);
 
         if ($user && password_verify($password, $user['password'])) {
             $session = Session::instance();
@@ -45,7 +45,7 @@ class Service_Auth {
         $session = Session::instance();
         $user_id = $session->get('user_id');
         if ($user_id) {
-            return Model::factory('User')->get_by_id($user_id);
+            return Model::factory('User')->getById($user_id);
         } 
         
         throw new Kohana_Exception('Not authenticated', null, 401);

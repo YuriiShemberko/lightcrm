@@ -1,33 +1,33 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+const PAGINATION_DEFAULT_PAGE = 1;
+const PAGINATION_DEFAULT_PER_PAGE = 10;
+
 class Model_Contact extends ORM {
 
     protected $_table_name = 'contacts';
 
-    public function get_all()
+    public function getPaged($pagination, $filters)
     {
-        return $this->order_by('created_at', 'DESC')
-                    ->find_all()
-                    ->as_array();
-    }
+        $page = $pagination['page'] ?? PAGINATION_DEFAULT_PAGE;
+        $limit = $pagination['per_page'] ?? PAGINATION_DEFAULT_PER_PAGE;
 
-    public function get_paged($pagination, $filters)
-    {
-        $page = $pagination['page'] ?? 1;
-        $limit = $pagination['per_page'] ?? 10;
-
-        $filtered_items = (clone $this);
+        $filtered_items = ORM::factory($this->_object_name);
         foreach ($filters as $field => $value) {
             $filtered_items->where($field, '=', $value);
         }
 
-        $total = (clone $filtered_items)->count_all();
+        $total_items = ORM::factory($this->_object_name);
+        foreach ($filters as $field => $value) {
+            $total_items->where($field, '=', $value);
+        }
+        $total = $total_items->count_all();
 
         $items = $filtered_items
-                    ->limit($limit)
-                    ->offset(($page - 1) * $limit)
-                    ->order_by('created_at', 'DESC')
-                    ->find_all();
+            ->limit($limit)
+            ->offset(($page - 1) * $limit)
+            ->order_by('created_at', 'DESC')
+            ->find_all();
 
         $data = [];
         foreach ($items as $item) {
@@ -40,27 +40,7 @@ class Model_Contact extends ORM {
         ];
     }
 
-    public function get_next()
-    {
-        // First try to get a callback contact with past callback_at timestamp
-        $next_contact = (clone $this)->where('status', '=', 'callback')
-                                      ->where('callback_at', '<=', DB::expr('NOW()'))
-                                      ->order_by('callback_at', 'ASC')
-                                      ->find();
-
-        if ($next_contact->loaded()) {
-            return $next_contact;
-        }
-
-        // If no callback found, get the oldest 'new' contact
-        $next_contact = (clone $this)->where('status', '=', 'new')
-                                      ->order_by('created_at', 'ASC')
-                                      ->find();
-
-        return $next_contact->loaded() ? $next_contact : null;
-    }
-
-    public function create_contact($name, $phone)
+    public function createContact($name, $phone)
     {
         $this->name = $name;
         $this->phone = $phone;
@@ -69,13 +49,7 @@ class Model_Contact extends ORM {
         return $this->id;
     }
 
-    public function get_by_id($id)
-    {
-        $contact = ORM::factory('Contact', $id);
-        return $contact->loaded() ? $contact->as_array() : NULL;
-    }
-
-    public function update_contact($id, $data)
+    public function updateContact($id, $data)
     {
         $contact = ORM::factory('Contact', $id);
         if ($contact->loaded())

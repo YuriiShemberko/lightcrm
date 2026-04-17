@@ -2,6 +2,11 @@ import React from 'react';
 import { Chip } from '@mui/material';
 import { type Contact } from '../types';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 interface CallStatusChipProps {
   status: Contact['status'];
   callbackAt?: Contact['callback_at'];
@@ -13,7 +18,8 @@ const CallStatusChip: React.FC<CallStatusChipProps> = ({ status, callbackAt }) =
       case 'new': return 'Новий';
       case 'called': return 'Дзвонили';
       case 'failed': return 'Невдало';
-      case 'callback': return `Передзвонити ${callbackAt ? `(${new Date(callbackAt).toLocaleString('uk-UA')})` : ''}`;
+      case 'callback': 
+        return `Передзвонити ${callbackAt ? `(${dayjs.utc(callbackAt).local().format('DD.MM.YYYY HH:mm')})` : ''}`;
       default: return status;
     }
   };

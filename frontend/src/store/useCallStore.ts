@@ -5,6 +5,9 @@ import { type CallLog } from '../types';
 import { createCallLog } from '../api/callLogs';
 import { updateContactStatus } from '../api/contacts';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 interface CallStoreState {
 	activeContact: Contact | null;
@@ -52,8 +55,8 @@ export const useCallStore = create<CallStoreState>((set, get) => ({
       });
 
       const contactStatus = status === 'no_answer' ? 'failed' : status === 'busy' ? 'callback' : 'called';
-      const callbackAtSqlFormat = callbackAt ? dayjs(callbackAt).format('YYYY-MM-DD HH:mm:ss') : undefined;
-
+  
+      const callbackAtSqlFormat = callbackAt ? dayjs(callbackAt).utc().format('YYYY-MM-DD HH:mm:ss') : undefined;
 
       await updateContactStatus(activeContact.id, contactStatus, callbackAtSqlFormat);
 

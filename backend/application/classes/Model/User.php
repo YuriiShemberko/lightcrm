@@ -4,7 +4,7 @@ class Model_User extends ORM {
 
     protected $_table_name = 'users';
 
-    public function get_by_login($login)
+    public function getByLogin($login)
     {
         $user = $this->where('login', '=', $login)->find();
         if ($user->loaded())
@@ -13,11 +13,5 @@ class Model_User extends ORM {
         }
 
         return NULL;
-    }
-
-    public function check_password($password)
-    {
-        // Якщо в базі паролі захешовані, тут буде логіка перевірки
-        // return Password::verify($password, $this->password);
     }
 }

@@ -9,8 +9,9 @@ abstract class Controller_Api_Core_Authorized extends Controller_Api_Core_Base {
         try {
             Service_Auth::loginRequiredGuard();
         } catch (Kohana_Exception $e) {
-            $this->send_response($e->getCode(), array('error' => $e->getMessage()));
-            exit;
+            $exception = new HTTP_Exception_401($e->getMessage());
+            $exception->headers('WWW-Authenticate', 'Token');
+            throw $exception;
         }
     }
 }

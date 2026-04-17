@@ -7,12 +7,12 @@ class Controller_Api_CallLogs extends Controller_Api_Core_Rest
         try {
             $pagination = Validation_Pagination::validate($this->request->query());
             $filters = Validation_CallLog_Filters::validate($this->request->query());
-            $result = ORM::factory('CallLog')->get_paged(
+            $result = ORM::factory('CallLog')->getPaged(
                 $pagination,
                 $filters,
             );
             
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
                     'items' => $result['items'],
@@ -24,7 +24,7 @@ class Controller_Api_CallLogs extends Controller_Api_Core_Rest
                 ],
             ]);
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), ['errors'  => $e->getMessage()]);
+            return $this->sendResponse($e->getCode(), ['errors'  => $e->getMessage()]);
         }
     }
 
@@ -37,9 +37,9 @@ class Controller_Api_CallLogs extends Controller_Api_Core_Rest
             $call_log = ORM::factory('CallLog');
             $id = $call_log->add_log($call_log_params['contact_id'], $call_log_params['result'], $call_log_params['duration_sec']);
             
-            return $this->send_response(201, ['success' => true, 'id' => $id]);
+            return $this->sendResponse(201, ['success' => true, 'id' => $id]);
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), ['errors' => $e->getMessage()]);
+            return $this->sendResponse($e->getCode(), ['errors' => $e->getMessage()]);
         }
     }
 }

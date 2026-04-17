@@ -9,9 +9,9 @@ class Controller_Api_Contact extends Controller_Api_Core_Rest
             $data = json_decode($this->request->body(), true);
             $params = Validation_Contact_Params::validate($data);
 
-            $contact = ORM::factory('Contact')->update_contact($contact_id, $params);
+            $contact = ORM::factory('Contact')->updateContact($contact_id, $params);
 
-            return $this->send_response(200, [
+            return $this->sendResponse(200, [
                 'success' => true,
                 'contact' => [
                     'id' => $contact['id'],
@@ -22,7 +22,7 @@ class Controller_Api_Contact extends Controller_Api_Core_Rest
                 ]
             ]);
         } catch (Kohana_Exception $e) {
-            return $this->send_response($e->getCode(), [
+            return $this->sendResponse($e->getCode(), [
                 'success' => false,
                 'errors'  => $e->getMessage()
             ]);
