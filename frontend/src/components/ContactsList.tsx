@@ -1,26 +1,19 @@
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
   Box,
-  CircularProgress,
-  Alert,
   Button,
-  TablePagination,
+  Typography,
 } from '@mui/material';
 import { Refresh as RefreshIcon } from '@mui/icons-material';
-import ContactsEmptyState from './ContactsEmptyState';
 import CallStatusChip from './CallStatusChip';
 import { useContactsStore } from '../store/useContactsStore';
 import ContactStatusSwitcher from './ContactStatusSwitcher';
-import { useEffect } from 'react';
+import NewContactModal from './NewContactModal';
+import { useEffect, useState } from 'react';
+import { type NewContactData, type Contact } from '../types';
+import { type Column } from './ScrollableTable';
+import ContactsTableWrapper from './ContactsTableWrapper';
 
-const ContactsList = () => {
+const ContactsScreen = () => {
   const {
     contacts,
     isLoading,
@@ -30,45 +23,44 @@ const ContactsList = () => {
     changePage,
     filterStatus,
     changeFilterStatus,
+    addNewContact,
     perPage,
     reload,
   } = useContactsStore();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     reload();
   }, []);
 
-  if (isLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert
-        severity="error"
-        action={
-          <Button color="inherit" size="small" onClick={reload}>
-            Спробувати знову
-          </Button>
-        }
-      >
-        {error}
-      </Alert>
-    );
-  }
-
-  if (contacts.length === 0) {
-    return <ContactsEmptyState />;
-  }
+  const columns: Column<Contact>[] = [
+    {
+      key: 'name',
+      label: "Ім'я",
+      render: (contact) => <Typography variant="body1" sx={{ fontWeight: 'medium' }}>{contact.name}</Typography>,
+    },
+    {
+      key: 'phone',
+      label: 'Телефон',
+      render: (contact) => <Typography variant="body2">{contact.phone}</Typography>,
+    },
+    {
+      key: 'status',
+      label: 'Статус',
+      render: (contact) => <CallStatusChip status={contact.status} callbackAt={contact.callback_at} />,
+    },
+    {
+      key: 'created_at',
+      label: 'Створено',
+      render: (contact) => <Typography variant="body2" color="text.secondary">{new Date(contact.created_at).toLocaleDateString('uk-UA')}</Typography>,
+    },
+  ];
 
   return (
-    <TableContainer component={Paper}>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6">
+    <>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f9f9f9', borderBottom: '1px solid #eee' }}>
+        <Typography color="primary" variant="h6">
           Контакти {total > 0 ? `(${total})` : ''}
         </Typography>
         <Button
@@ -79,53 +71,32 @@ const ContactsList = () => {
         >
           Оновити
         </Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          Додати контакт
+        </Button>
         <ContactStatusSwitcher value={filterStatus} onChange={changeFilterStatus} />
       </Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell><strong>Ім'я</strong></TableCell>
-            <TableCell><strong>Телефон</strong></TableCell>
-            <TableCell><strong>Статус</strong></TableCell>
-            <TableCell><strong>Створено</strong></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {contacts.map((contact) => (
-            <TableRow key={contact.id} hover>
-              <TableCell>
-                <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                  {contact.name}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="body2">
-                  {contact.phone}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <CallStatusChip status={contact.status} callbackAt={contact.callback_at} />
-              </TableCell>
-              <TableCell>
-                <Typography variant="body2" color="text.secondary">
-                  {new Date(contact.created_at).toLocaleDateString('uk-UA')}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        component="div"
-        count={total}
-        rowsPerPage={perPage}
-        rowsPerPageOptions={[]}
-        labelRowsPerPage=""
-        page={page - 1}
-        onPageChange={(_, page) => changePage(page + 1)}
+      <ContactsTableWrapper
+        contacts={contacts}
+        isLoading={isLoading}
+        error={error}
+        reload={reload}
+        columns={columns}
+        total={total}
+        page={page}
+        perPage={perPage}
+        changePage={changePage}
       />
-    </TableContainer>
+      <NewContactModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={(data: NewContactData) => {
+          addNewContact(data);
+          setIsModalOpen(false);
+        }}
+      />
+    </>
   );
 };
 
-export default ContactsList;
+export default ContactsScreen;

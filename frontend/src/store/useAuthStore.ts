@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { type User } from '../types';
+import { logout as postLogout } from '../api/auth';
 
 interface AuthState {
   user: User | null;
@@ -18,10 +19,13 @@ export const useAuthStore = create<AuthState>()(
         user: userData, 
         isAuthenticated: true 
       }),
-      logout: () => set({ 
-        user: null, 
-        isAuthenticated: false 
-      }),
+      logout: async () => {
+        await postLogout();
+        set({ 
+          user: null, 
+          isAuthenticated: false 
+        });
+      },
     }),
     {
       name: 'auth-storage',

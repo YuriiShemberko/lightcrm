@@ -28,4 +28,35 @@ class Model_CallLog extends ORM {
                     ->find_all()
                     ->as_array();
     }
+
+    public function get_paged($pagination, $filters)
+    {
+        $page = $pagination['page'] ?? 1;
+        $limit = $pagination['per_page'] ?? 10;
+
+        $filtered_items = (clone $this)->with('contact');
+        foreach ($filters as $field => $value) {
+            $filtered_items->where($field, '=', $value);
+        }
+
+        $total = (clone $filtered_items)->count_all();
+
+        $items = $filtered_items
+                    ->limit($limit)
+                    ->offset(($page - 1) * $limit)
+                    ->order_by('called_at', 'DESC')
+                    ->find_all();
+
+        $data = [];
+        foreach ($items as $item) {
+            $arr = $item->as_array();
+            $arr['contact_name'] = $item->contact->name ?? null;
+            $data[] = $arr;
+        }
+
+        return [
+            'items' => $data,
+            'total' => (int) $total
+        ];
+    }
 }

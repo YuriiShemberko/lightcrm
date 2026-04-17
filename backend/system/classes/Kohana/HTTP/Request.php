@@ -22,6 +22,7 @@ interface Kohana_HTTP_Request extends HTTP_Message {
 	const OPTIONS   = 'OPTIONS';
 	const TRACE     = 'TRACE';
 	const CONNECT   = 'CONNECT';
+	const PATCH     = 'PATCH';
 
 	/**
 	 * Gets or sets the HTTP method. Usually GET, POST, PUT or DELETE in

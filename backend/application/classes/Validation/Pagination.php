@@ -11,7 +11,7 @@ class Validation_Pagination {
             ->rule('per_page', 'range', array(':value', 1, 100));
 
         if (!$v->check()) {
-            throw new Kohana_Exception_Validation($v, 'Invalid pagination parameters');
+            throw new Kohana_Validation_Exception($v, 'Invalid pagination parameters');
         }
 
         return [

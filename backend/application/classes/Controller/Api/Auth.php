@@ -56,4 +56,27 @@ class Controller_Api_Auth extends Controller_Api_Base {
             'message' => 'Logged out successfully'
         ]);
     }
+
+    /**
+     * GET /api/auth/me
+     * Returns current authenticated user info based on session
+     */
+    public function action_me()
+    {
+        $session = Session::instance();
+        $user_id = $session->get('user_id');
+        $user_login = $session->get('user_login');
+
+        if ($user_id && $user_login) {
+            return $this->send_response(200, [
+                'success' => true,
+                'data' => [
+                    'id' => $user_id,
+                    'login' => $user_login
+                ],
+            ]);
+        }
+
+        return $this->send_response(401, array('error' => 'Not authenticated'));
+    }
 }

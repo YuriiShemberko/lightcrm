@@ -6,15 +6,29 @@ Route::set('api_auth', 'api/auth(/<action>)')
         'controller' => 'Auth',
     ));
 
-Route::set('api_rest', 'api/<controller>(/<id>)', array('id' => '\d+'))
+Route::set('api_contact_status', 'api/contacts/<id>/status', array('id' => '\d+'))
     ->defaults(array(
         'directory'  => 'Api',
-        'action'     => 'rest',
+        'controller' => 'Contacts',
+        'action'     => 'status',
+    ));
+
+Route::set('api_call_logs', 'api/call-logs(/<id>)', array('id' => '\d+'))
+    ->defaults(array(
+        'directory' => 'Api',
+        'controller' => 'CallLogs',
+        'action' => 'rest',
     ));
 
 Route::set('api_actions', 'api/<controller>/<action>')
     ->defaults(array(
         'directory' => 'Api',
+    ));
+
+Route::set('api_rest', 'api/<controller>(/<id>)', array('id' => '\d+'))
+    ->defaults(array(
+        'directory'  => 'Api',
+        'action'     => 'rest',
     ));
 
 Route::set('api_default', 'api/<controller>')

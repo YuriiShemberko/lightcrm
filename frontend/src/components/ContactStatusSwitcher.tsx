@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Stack, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, Typography } from '@mui/material';
+import { Stack, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, Typography } from '@mui/material';
 import { type Contact } from '../types';
 
 interface ContactStatusSwitcherProps {

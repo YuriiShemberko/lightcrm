@@ -1,6 +1,8 @@
 import { create } from 'zustand';
-import { type Contact } from '../types';
-import { getContacts } from '../api/contacts';
+import { type Contact, type NewContactData } from '../types';
+import { getContacts, createContact } from '../api/contacts';
+
+type ContactStatus = Contact['status'] | null;
 
 interface ContactsState {
   contacts: Contact[];
@@ -8,8 +10,9 @@ interface ContactsState {
   error: string | null;
   page: number;
   perPage: number;
-  filterStatus: Contact['status'] | null;
-  changeFilterStatus: (status: Contact['status'] | null) => void;
+  filterStatus: ContactStatus;
+  addNewContact: (contact: NewContactData) => Promise<void>;
+  changeFilterStatus: (status: ContactStatus) => void;
   total: number;
   changePage: (page: number) => void;
   reload: () => void;
@@ -33,6 +36,21 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
     set({ page });
     get().reload();
   },
+  addNewContact: async (contact: NewContactData) => {
+    set({ isLoading: true, error: null });
+    try {
+      await createContact(contact);
+      await get().reload();
+    } catch (err: any) {
+      let message = 'Помилка при створенні контакту';
+      if (err?.response?.data?.error) {
+        message = err.response.data.error;
+      } else if (err?.message) {
+        message = err.message;
+      }
+      set({ error: message, isLoading: false });
+    }
+  },
   reload: async () => {
     const { page, perPage, filterStatus } = get();
 
@@ -43,6 +61,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
       set({
         contacts: data.items,
         total: data.meta.total,
+        page: data.meta.page,
         isLoading: false,
       });
     } else {

@@ -1,5 +1,5 @@
 import api from './client';
-import { type ApiResponse, type Contact, type PaginatedData } from '../types';
+import { type ApiResponse, type Contact, type PaginatedData, type NewContactData } from '../types';
 
 export const getContacts = async (page: number, perPage: number, filterStatus: Contact['status'] | null = null): Promise<ApiResponse<PaginatedData<Contact>>> => {
   const { data } = await api.get('/contacts', {
@@ -8,22 +8,17 @@ export const getContacts = async (page: number, perPage: number, filterStatus: C
   return data;
 };
 
-export const getContact = async (id: number): Promise<ApiResponse<Contact>> => {
-  const { data } = await api.get(`/contacts/${id}`);
-  return data;
-};
-
-export const createContact = async (contact: Omit<Contact, 'id' | 'created_at' | 'updated_at'>): Promise<ApiResponse<Contact>> => {
+export const createContact = async (contact: NewContactData): Promise<ApiResponse<Contact>> => {
   const { data } = await api.post('/contacts', contact);
   return data;
 };
 
-export const updateContact = async (id: number, contact: Partial<Omit<Contact, 'id' | 'created_at' | 'updated_at'>>): Promise<ApiResponse<Contact>> => {
-  const { data } = await api.put(`/contacts/${id}`, contact);
+export const getNextContact = async (): Promise<ApiResponse<Contact>> => {
+  const { data } = await api.get('/contacts/next');
   return data;
 };
 
-export const deleteContact = async (id: number): Promise<ApiResponse<void>> => {
-  const { data } = await api.delete(`/contacts/${id}`);
+export const updateContactStatus = async (id: number, status: Contact['status'], callbackAtSqlFormat?: string): Promise<ApiResponse<Contact>> => {
+  const { data } = await api.patch(`/contacts/${id}/status`, { status, callback_at: callbackAtSqlFormat });
   return data;
 };

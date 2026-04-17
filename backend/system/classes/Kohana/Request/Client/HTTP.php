@@ -62,6 +62,7 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 			HTTP_Request::OPTIONS => HTTPRequest::METH_OPTIONS,
 			HTTP_Request::TRACE   => HTTPRequest::METH_TRACE,
 			HTTP_Request::CONNECT => HTTPRequest::METH_CONNECT,
+			HTTP_Request::PATCH   => HTTPRequest::METH_PATCH,
 		);
 
 		// Create an http request object
