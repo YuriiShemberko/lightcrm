@@ -132,6 +132,8 @@ Kohana::modules(array(
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
+require_once APPPATH.'classes/Config/EnvStorage.php';
+
 /**
  * Cookie Salt
  * @see  http://kohanaframework.org/3.3/guide/kohana/cookies

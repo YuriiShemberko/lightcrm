@@ -21,14 +21,6 @@ class Model_CallLog extends ORM {
         return $this->id;
     }
 
-    public function get_by_contact($contact_id)
-    {
-        return $this->where('contact_id', '=', (int)$contact_id)
-                    ->order_by('called_at', 'DESC')
-                    ->find_all()
-                    ->as_array();
-    }
-
     public function get_paged($pagination, $filters)
     {
         $page = $pagination['page'] ?? 1;

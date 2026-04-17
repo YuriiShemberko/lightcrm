@@ -3,15 +3,15 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import { Refresh as RefreshIcon } from '@mui/icons-material';
 import CallStatusChip from './CallStatusChip';
 import { useContactsStore } from '../store/useContactsStore';
 import ContactStatusSwitcher from './ContactStatusSwitcher';
 import NewContactModal from './NewContactModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { type NewContactData, type Contact } from '../types';
 import { type Column } from './ScrollableTable';
 import ContactsTableWrapper from './ContactsTableWrapper';
+import { usePolling } from '../hooks/usePolling';
 
 const ContactsScreen = () => {
   const {
@@ -28,11 +28,9 @@ const ContactsScreen = () => {
     reload,
   } = useContactsStore();
 
+  usePolling(reload, 30000);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    reload();
-  }, []);
 
   const columns: Column<Contact>[] = [
     {
@@ -60,17 +58,12 @@ const ContactsScreen = () => {
   return (
     <>
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f9f9f9', borderBottom: '1px solid #eee' }}>
-        <Typography color="primary" variant="h6">
+        <Typography color="primary" variant="h6" align="left">
           Контакти {total > 0 ? `(${total})` : ''}
+          <Typography variant="body2" color="textSecondary">
+            Оновлюється кожні 30 секунд
+          </Typography>
         </Typography>
-        <Button
-          startIcon={<RefreshIcon />}
-          onClick={reload}
-          variant="outlined"
-          size="small"
-        >
-          Оновити
-        </Button>
         <Button onClick={() => setIsModalOpen(true)}>
           Додати контакт
         </Button>
