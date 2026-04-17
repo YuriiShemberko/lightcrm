@@ -1,8 +1,23 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct script access.');
 
+class Model_User extends ORM {
 
-class Model_User extends Model {
-    public function get_by_login($login) {
-        return DB::select()->from('users')->where('login', '=', $login)->execute()->current();
+    protected $_table_name = 'users';
+
+    public function get_by_login($login)
+    {
+        $user = $this->where('login', '=', $login)->find();
+        if ($user->loaded())
+        {
+            return $user->as_array();
+        }
+
+        return NULL;
+    }
+
+    public function check_password($password)
+    {
+        // Якщо в базі паролі захешовані, тут буде логіка перевірки
+        // return Password::verify($password, $this->password);
     }
 }

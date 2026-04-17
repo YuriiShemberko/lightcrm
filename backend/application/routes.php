@@ -6,22 +6,20 @@ Route::set('api_auth', 'api/auth(/<action>)')
         'controller' => 'Auth',
     ));
 
-// RESTful API route with optional ID parameter
-Route::set('api_id', 'api/<controller>/<id>', array('id' => '\d+'))
+Route::set('api_rest', 'api/<controller>(/<id>)', array('id' => '\d+'))
     ->defaults(array(
         'directory'  => 'Api',
         'action'     => 'rest',
     ));
 
-// Default API route for actions without ID
-Route::set('api_default', 'api/<controller>(/<action>)')
+Route::set('api_actions', 'api/<controller>/<action>')
+    ->defaults(array(
+        'directory' => 'Api',
+    ));
+
+Route::set('api_default', 'api/<controller>')
     ->defaults(array(
         'directory' => 'Api',
         'action'    => 'index',
     ));
-
-Route::set('default', '(<controller>(/<action>(/<id>)))')
-    ->defaults(array(
-        'controller' => 'welcome',
-        'action'     => 'index',
-    ));
+    

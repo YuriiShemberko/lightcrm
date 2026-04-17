@@ -28,7 +28,8 @@ class Controller_Api_Contacts extends Controller_Api_Base {
 
     private function _item($id)
     {
-        $contact = Model::factory('Contact')->get_by_id($id);
+        $contact = ORM::factory('Contact')->get_by_id($id);
+        
         if ($contact) {
             return $this->send_response(200, ['success' => true, 'data' => $contact]);
         } else {
@@ -38,13 +39,38 @@ class Controller_Api_Contacts extends Controller_Api_Base {
 
     private function _list()
     {
-        $contacts = Model::factory('Contact')->get_all();
-        return $this->send_response(200, ['success' => true, 'data' => $contacts]);
+        try {
+            $pagination = Validation_Pagination::validate($this->request->query());
+            $filters = Validation_ContactFilters::validate($this->request->query());
+            $result = ORM::factory('Contact')->get_paged(
+                $pagination,
+                $filters,
+            );
+            
+            return $this->send_response(200, [
+                'success' => true,
+                'data' => [
+                    'items' => $result['items'],
+                    'meta' => [
+                        'total' => $result['total'],
+                        'page' => $pagination['page'],
+                        'per_page' => $pagination['per_page']
+                    ],
+                ],
+            ]);
+        } catch (Kohana_Exception_Validation $e) {
+            return $this->send_response(400, [
+                'success' => false, 
+                'errors'  => $e->errors('validation')
+            ]);
+        } catch (Exception $e) {
+            return $this->send_response(500, ['error' => $e->getMessage()]);
+        }
     }
 
     private function _update($id)
     {
-        if (!$id) return $this->send_response(400, ['error' => 'ID is required in URL']);
+        if (!$id) return $this->send_response(400, ['error' => 'ID is required']);
 
         $data = json_decode($this->request->body(), true);
         
@@ -55,8 +81,20 @@ class Controller_Api_Contacts extends Controller_Api_Base {
         $allowed = ['status', 'callback_at', 'name', 'phone'];
         $update_data = array_intersect_key($data, array_flip($allowed));
 
-        Model::factory('Contact')->update_contact($id, $update_data);
+        $success = ORM::factory('Contact')->update_contact($id, $update_data);
 
-        return $this->send_response(200, ['success' => true]);
+        if ($success) {
+            return $this->send_response(200, ['success' => true]);
+        }
+        
+        return $this->send_response(404, ['error' => 'Contact not found or update failed']);
+    }
+
+    private function _delete($id)
+    {
+        if (!$id) return $this->send_response(400, ['error' => 'ID is required']);
+        
+        $success = ORM::factory('Contact')->delete_contact($id);
+        return $this->send_response($success ? 200 : 404, ['success' => $success]);
     }
 }

@@ -31,7 +31,13 @@ class Controller_Api_Auth extends Controller_Api_Base {
             $session->set('user_id', $user['id']);
             $session->set('user_login', $user['login']);
 
-            return $this->send_response(200, ['success' => true]);
+            return $this->send_response(200, [
+                'success' => true,
+                'data' => [
+                    'id' => $user['id'],
+                    'login' => $user['login']
+                ],
+            ]);
         }
 
         return $this->send_response(401, array('error' => 'Invalid credentials'));
