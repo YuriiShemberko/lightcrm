@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Api_Auth extends Controller_Api_Base {
+class Controller_Api_Auth extends Controller_Api_Core_Base {
 
     /**
      * POST /api/auth/login
@@ -8,28 +8,16 @@ class Controller_Api_Auth extends Controller_Api_Base {
      */
     public function action_login()
     {
-        $data = json_decode($this->request->body(), true);
-        $login = $data['login'] ?? null;
-        $password = $data['password'] ?? null;
+        try {
+            Validation_RequestMethod::validate($this->request->method(), ['POST']);
+            
+            $data = json_decode($this->request->body(), true);
+            
+            $login_params = Validation_Auth_Params::validate($data);
 
-        if (!$login || !$password)
-        {
-            return $this->send_response(400, array('error' => 'Login and password required'));
-        }
+            Service_Auth::alreadyLoggedInGuard();
 
-        $user = Model::factory('User')->get_by_login($login);
-
-        if (Session::instance()->get('user_id')) {
-            return $this->send_response(400, array('error' => 'Already logged in'));
-        }
-
-        // Hash check
-        if ($user && password_verify($password, $user['password']))
-        {
-            // Start session and store user info
-            $session = Session::instance();
-            $session->set('user_id', $user['id']);
-            $session->set('user_login', $user['login']);
+            $user = Service_Auth::login($login_params);
 
             return $this->send_response(200, [
                 'success' => true,
@@ -38,9 +26,10 @@ class Controller_Api_Auth extends Controller_Api_Base {
                     'login' => $user['login']
                 ],
             ]);
-        }
 
-        return $this->send_response(401, array('error' => 'Invalid credentials'));
+        } catch (Kohana_Exception $e) {
+            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+        }
     }
 
     /**
@@ -49,12 +38,18 @@ class Controller_Api_Auth extends Controller_Api_Base {
      */
     public function action_logout()
     {
-        Session::instance()->destroy();
+        try {
+            Validation_RequestMethod::validate($this->request->method(), ['POST']);
+            Service_Auth::logout();
 
-        return $this->send_response(200, [
-            'success' => true,
-            'message' => 'Logged out successfully'
-        ]);
+            return $this->send_response(200, [
+                'success' => true,
+                'message' => 'Logged out successfully'
+            ]);
+        
+        } catch (Kohana_Exception $e) {
+            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+        }
     }
 
     /**
@@ -63,20 +58,19 @@ class Controller_Api_Auth extends Controller_Api_Base {
      */
     public function action_me()
     {
-        $session = Session::instance();
-        $user_id = $session->get('user_id');
-        $user_login = $session->get('user_login');
-
-        if ($user_id && $user_login) {
+        try {
+            $user = Service_Auth::getCurrentUser();
+    
             return $this->send_response(200, [
                 'success' => true,
                 'data' => [
-                    'id' => $user_id,
-                    'login' => $user_login
+                    'id' => $user['id'],
+                    'login' => $user['login']
                 ],
             ]);
-        }
 
-        return $this->send_response(401, array('error' => 'Not authenticated'));
+        } catch (Kohana_Exception $e) {
+            return $this->send_response($e->getCode(), array('error' => $e->getMessage()));
+        }
     }
 }

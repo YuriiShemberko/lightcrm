@@ -14,11 +14,11 @@ export const createContact = async (contact: NewContactData): Promise<ApiRespons
 };
 
 export const getNextContact = async (): Promise<ApiResponse<Contact>> => {
-  const { data } = await api.get('/contacts/next');
+  const { data } = await api.post('/contact/next');
   return data;
 };
 
 export const updateContactStatus = async (id: number, status: Contact['status'], callbackAtSqlFormat?: string): Promise<ApiResponse<Contact>> => {
-  const { data } = await api.patch(`/contacts/${id}/status`, { status, callback_at: callbackAtSqlFormat });
+  const { data } = await api.patch(`/contact/${id}`, { status, callback_at: callbackAtSqlFormat });
   return data;
 };

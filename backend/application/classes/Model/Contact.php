@@ -86,19 +86,10 @@ class Model_Contact extends ORM {
             }
             
             $contact->values($data)->save();
-            return TRUE;
-        }
-        return FALSE;
-    }
 
-    public function delete_contact($id)
-    {
-        $contact = ORM::factory('Contact', $id);
-        if ($contact->loaded())
-        {
-            $contact->delete();
-            return TRUE;
+            return $contact->as_array();
+        } else {
+            throw new Kohana_Exception("Contact not found", null, 404);
         }
-        return FALSE;
     }
 }
