@@ -18,10 +18,10 @@ return array
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
-			'hostname'   => getenv('MYSQL_HOST'),
-            'database'   => getenv('MYSQL_DATABASE_NAME'),
-            'username'   => getenv('MYSQL_USER'),
-            'password'   => getenv('MYSQL_PASSWORD'),
+			'hostname'   => getenv('DB_HOST_NAME'),
+            'database'   => getenv('DB_DATABASE_NAME'),
+            'username'   => getenv('DB_USER_NAME'),
+            'password'   => getenv('DB_PASSWORD'),
             'persistent' => FALSE,
 		),
 		'table_prefix' => '',

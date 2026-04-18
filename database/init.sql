@@ -23,8 +23,5 @@ CREATE TABLE IF NOT EXISTS `call_log` (
   INDEX `idx_contact_id` (`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Додаємо тестового користувача
--- login: admin
--- password: admin123 (хеш нижче згенеровано через password_hash з BCRYPT)
 INSERT INTO `users` (`login`, `password`) 
 VALUES ('admin', '$2y$10$i70PMQs.Dxpg8bTqw01NKOJsf6yy79Gl6VMOGr44J.CJ56XDlZw96');
