@@ -13,13 +13,14 @@ import {
 interface NewContactModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: {
-    name: string;
-    phone: string;
-  }) => void;
+  onSubmit: (data: { name: string; phone: string }) => void;
 }
 
-const NewContactModal: React.FC<NewContactModalProps> = ({ open, onClose, onSubmit }) => {
+const NewContactModal: React.FC<NewContactModalProps> = ({
+  open,
+  onClose,
+  onSubmit,
+}) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
@@ -40,7 +41,8 @@ const NewContactModal: React.FC<NewContactModalProps> = ({ open, onClose, onSubm
   };
   const validatePhone = (value: string) => {
     if (!value.trim()) return 'Введіть номер телефону';
-    if (!/^\+?[\d\s\-\(\)]{10,15}$/.test(value)) return 'Некоректний номер (10-15 цифр)';
+    if (!/^\+?[\d\s\-\(\)]{10,15}$/.test(value))
+      return 'Некоректний номер (10-15 цифр)';
     return null;
   };
 

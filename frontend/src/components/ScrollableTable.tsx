@@ -44,10 +44,14 @@ function ScrollableTable<T>({
     <Paper>
       {title && (
         <Box sx={{ p: 2, borderBottom: '1px solid #eee' }}>
-          <Typography variant="h6">{title} ({total > 0 ? total : rows.length})</Typography>
+          <Typography variant="h6">
+            {title} ({total > 0 ? total : rows.length})
+          </Typography>
         </Box>
       )}
-      <TableContainer sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 0 }}>
+      <TableContainer
+        sx={{ maxHeight: 400, overflowY: 'auto', borderRadius: 0 }}
+      >
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -62,7 +66,9 @@ function ScrollableTable<T>({
             {rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} align="center">
-                  <Typography color="text.secondary" sx={{ py: 3 }}>{emptyText}</Typography>
+                  <Typography color="text.secondary" sx={{ py: 3 }}>
+                    {emptyText}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (

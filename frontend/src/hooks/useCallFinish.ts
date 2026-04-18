@@ -3,8 +3,6 @@ export type CallFinishData = {
   result: 'answered' | 'no_answer' | 'busy';
   durationSec: number;
   callbackAt?: string | null;
-}
+};
 
-export const useCallFinish = () => {
-  
-}
+export const useCallFinish = () => {};

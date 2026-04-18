@@ -29,8 +29,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
   page: 1,
   perPage: PER_PAGE,
   changeFilterStatus: (status) => {
-    set({ filterStatus: status }),
-    get().reload();
+    (set({ filterStatus: status }), get().reload());
   },
   changePage: (page: number) => {
     set({ page });
@@ -56,7 +55,11 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
 
     set({ isLoading: true, error: null });
 
-    const { data, success, error } = await getContacts(page, perPage, filterStatus);
+    const { data, success, error } = await getContacts(
+      page,
+      perPage,
+      filterStatus
+    );
     if (success && data) {
       set({
         contacts: data.items,
@@ -65,7 +68,10 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
         isLoading: false,
       });
     } else {
-      set({ error: error || 'Помилка при завантаженні контактів', isLoading: false });
+      set({
+        error: error || 'Помилка при завантаженні контактів',
+        isLoading: false,
+      });
     }
-  }
+  },
 }));

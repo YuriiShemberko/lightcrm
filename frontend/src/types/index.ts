@@ -10,7 +10,7 @@ export interface PaginatedData<T> {
     page: number;
     total: number;
     per_page: number;
-  }
+  };
 }
 
 export interface Contact {

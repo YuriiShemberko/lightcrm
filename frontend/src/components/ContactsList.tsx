@@ -1,8 +1,4 @@
-import {
-  Box,
-  Button,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import CallStatusChip from './CallStatusChip';
 import { useContactsStore } from '../store/useContactsStore';
 import ContactStatusSwitcher from './ContactStatusSwitcher';
@@ -29,45 +25,70 @@ const ContactsScreen = () => {
   } = useContactsStore();
 
   usePolling(reload, 30000);
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns: Column<Contact>[] = [
     {
       key: 'name',
       label: "Ім'я",
-      render: (contact) => <Typography variant="body1" sx={{ fontWeight: 'medium' }}>{contact.name}</Typography>,
+      render: (contact) => (
+        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+          {contact.name}
+        </Typography>
+      ),
     },
     {
       key: 'phone',
       label: 'Телефон',
-      render: (contact) => <Typography variant="body2">{contact.phone}</Typography>,
+      render: (contact) => (
+        <Typography variant="body2">{contact.phone}</Typography>
+      ),
     },
     {
       key: 'status',
       label: 'Статус',
-      render: (contact) => <CallStatusChip status={contact.status} callbackAt={contact.callback_at} />,
+      render: (contact) => (
+        <CallStatusChip
+          status={contact.status}
+          callbackAt={contact.callback_at}
+        />
+      ),
     },
     {
       key: 'created_at',
       label: 'Створено',
-      render: (contact) => <Typography variant="body2" color="text.secondary">{new Date(contact.created_at).toLocaleDateString('uk-UA')}</Typography>,
+      render: (contact) => (
+        <Typography variant="body2" color="text.secondary">
+          {new Date(contact.created_at).toLocaleDateString('uk-UA')}
+        </Typography>
+      ),
     },
   ];
 
   return (
     <>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f9f9f9', borderBottom: '1px solid #eee' }}>
+      <Box
+        sx={{
+          p: 2,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#f9f9f9',
+          borderBottom: '1px solid #eee',
+        }}
+      >
         <Typography color="primary" variant="h6" align="left">
           Контакти {total > 0 ? `(${total})` : ''}
           <Typography variant="body2" color="textSecondary">
             Оновлюється кожні 30 секунд
           </Typography>
         </Typography>
-        <Button onClick={() => setIsModalOpen(true)}>
-          Додати контакт
-        </Button>
-        <ContactStatusSwitcher value={filterStatus} onChange={changeFilterStatus} />
+        <Button onClick={() => setIsModalOpen(true)}>Додати контакт</Button>
+        <ContactStatusSwitcher
+          value={filterStatus}
+          onChange={changeFilterStatus}
+        />
       </Box>
       <ContactsTableWrapper
         contacts={contacts}

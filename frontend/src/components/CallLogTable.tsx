@@ -41,36 +41,56 @@ const columns: Column<CallLog>[] = [
   {
     key: 'contact_name',
     label: 'Контакт',
-    render: (log) => <Typography variant="body2">{log.contact_name || 'Невідомий'}</Typography>,
+    render: (log) => (
+      <Typography variant="body2">{log.contact_name || 'Невідомий'}</Typography>
+    ),
   },
   {
     key: 'called_at',
     label: 'Дата та час',
-    render: (log) => <Typography variant="body2">{new Date(log.called_at).toLocaleString('uk-UA')}</Typography>,
+    render: (log) => (
+      <Typography variant="body2">
+        {new Date(log.called_at).toLocaleString('uk-UA')}
+      </Typography>
+    ),
   },
   {
     key: 'result',
     label: 'Результат',
-    render: (log) => <Chip label={getResultLabel(log.result)} color={getResultColor(log.result) as any} size="small" />,
+    render: (log) => (
+      <Chip
+        label={getResultLabel(log.result)}
+        color={getResultColor(log.result) as any}
+        size="small"
+      />
+    ),
   },
   {
     key: 'duration_sec',
     label: 'Тривалість',
     align: 'right',
-    render: (log) => <Typography variant="body2" color="text.secondary">{formatDuration(log.duration_sec)}</Typography>,
+    render: (log) => (
+      <Typography variant="body2" color="text.secondary">
+        {formatDuration(log.duration_sec)}
+      </Typography>
+    ),
   },
 ];
 
-
 const CallLogTable = () => {
-  const { callLogs, isLoading, total, page, perPage, reload, changePage } = useCallLogsStore();
-  
+  const { callLogs, isLoading, total, page, perPage, reload, changePage } =
+    useCallLogsStore();
+
   useEffect(() => {
     reload();
   }, []);
 
   if (isLoading) {
-    return <Typography color="text.secondary" align="center" sx={{ py: 3 }}>Завантаження...</Typography>;
+    return (
+      <Typography color="text.secondary" align="center" sx={{ py: 3 }}>
+        Завантаження...
+      </Typography>
+    );
   }
 
   return (

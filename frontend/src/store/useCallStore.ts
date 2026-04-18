@@ -10,36 +10,50 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 interface CallStoreState {
-	activeContact: Contact | null;
-	isLoading: boolean;
+  activeContact: Contact | null;
+  isLoading: boolean;
   isTriggered: boolean;
-	error: string | null;
-	fetchNextContact: () => Promise<void>;
-	endCall: (status: CallLog['result'], durationSec?: number, callbackAt?: Date) => void;
-	reset: () => void;
+  error: string | null;
+  fetchNextContact: () => Promise<void>;
+  endCall: (
+    status: CallLog['result'],
+    durationSec?: number,
+    callbackAt?: Date
+  ) => void;
+  reset: () => void;
 }
 
 export const useCallStore = create<CallStoreState>((set, get) => ({
-	activeContact: null,
-	isLoading: false,
+  activeContact: null,
+  isLoading: false,
   startTime: null,
   isTriggered: false,
-	error: null,
-	fetchNextContact: async () => {
-		set({ isLoading: true, isTriggered: true, error: null });
+  error: null,
+  fetchNextContact: async () => {
+    set({ isLoading: true, isTriggered: true, error: null });
     try {
       const { data, success, error } = await getNextContact();
       if (success) {
         if (data) set({ activeContact: data, isLoading: false });
         else set({ activeContact: null, isLoading: false });
       } else {
-        set({ error: error || 'Помилка при отриманні наступного контакту', isLoading: false });
+        set({
+          error: error || 'Помилка при отриманні наступного контакту',
+          isLoading: false,
+        });
       }
     } catch (err) {
-      set({ error: 'Помилка при отриманні наступного контакту', isLoading: false });
+      set({
+        error: 'Помилка при отриманні наступного контакту',
+        isLoading: false,
+      });
     }
-	},
-	endCall: async (status: CallLog['result'], durationSec: number = 0, callbackAt?: Date) => {
+  },
+  endCall: async (
+    status: CallLog['result'],
+    durationSec: number = 0,
+    callbackAt?: Date
+  ) => {
     set({ isLoading: true, error: null });
 
     try {
@@ -54,20 +68,35 @@ export const useCallStore = create<CallStoreState>((set, get) => ({
         duration_sec: durationSec,
       });
 
-      const contactStatus = status === 'no_answer' ? 'failed' : status === 'busy' ? 'callback' : 'called';
-  
-      const callbackAtSqlFormat = callbackAt ? dayjs(callbackAt).utc().format('YYYY-MM-DD HH:mm:ss') : undefined;
+      const contactStatus =
+        status === 'no_answer'
+          ? 'failed'
+          : status === 'busy'
+            ? 'callback'
+            : 'called';
 
-      await updateContactStatus(activeContact.id, contactStatus, callbackAtSqlFormat);
+      const callbackAtSqlFormat = callbackAt
+        ? dayjs(callbackAt).utc().format('YYYY-MM-DD HH:mm:ss')
+        : undefined;
 
+      await updateContactStatus(
+        activeContact.id,
+        contactStatus,
+        callbackAtSqlFormat
+      );
     } catch (err) {
-        set({ error: 'Помилка при завершенні дзвінка', isLoading: false });
-        return;
+      set({ error: 'Помилка при завершенні дзвінка', isLoading: false });
+      return;
     }
 
     set({ isLoading: false, activeContact: null, isTriggered: false });
-	},
-	reset: () => {
-		set({ activeContact: null, isLoading: false, error: null, isTriggered: false });
-	},
+  },
+  reset: () => {
+    set({
+      activeContact: null,
+      isLoading: false,
+      error: null,
+      isTriggered: false,
+    });
+  },
 }));

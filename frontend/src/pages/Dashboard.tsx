@@ -16,8 +16,8 @@ const Dashboard: React.FC = () => {
         </Typography>
 
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             color="success"
             onClick={() => setShowWorkModal(true)}
           >
@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
           </Button>
         </Stack>
       </Paper>
-      <ContactsList/>
+      <ContactsList />
       <WorkModal open={showWorkModal} onClose={() => setShowWorkModal(false)} />
     </Container>
   );

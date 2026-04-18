@@ -37,10 +37,16 @@ export const useCallLogsStore = create<CallLogsState>((set, get) => ({
           isLoading: false,
         });
       } else {
-        set({ error: error || 'Помилка при завантаженні логів звінків', isLoading: false });
+        set({
+          error: error || 'Помилка при завантаженні логів звінків',
+          isLoading: false,
+        });
       }
     } catch (err) {
-      set({ error: 'Помилка при завантаженні логів звінків', isLoading: false });
+      set({
+        error: 'Помилка при завантаженні логів звінків',
+        isLoading: false,
+      });
     }
   },
 
@@ -53,5 +59,4 @@ export const useCallLogsStore = create<CallLogsState>((set, get) => ({
     const { page } = get();
     await get().load(page);
   },
-
 }));

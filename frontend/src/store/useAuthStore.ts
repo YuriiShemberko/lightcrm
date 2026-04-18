@@ -15,15 +15,16 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      login: (userData: User) => set({ 
-        user: userData, 
-        isAuthenticated: true 
-      }),
+      login: (userData: User) =>
+        set({
+          user: userData,
+          isAuthenticated: true,
+        }),
       logout: async () => {
         await postLogout();
-        set({ 
-          user: null, 
-          isAuthenticated: false 
+        set({
+          user: null,
+          isAuthenticated: false,
         });
       },
     }),

@@ -19,7 +19,14 @@ import TextField from '@mui/material/TextField';
 import { useCallStore } from '../store/useCallStore';
 
 const ActiveCall = () => {
-  const { activeContact: contact, isLoading, error, fetchNextContact, endCall, isTriggered } = useCallStore();
+  const {
+    activeContact: contact,
+    isLoading,
+    error,
+    fetchNextContact,
+    endCall,
+    isTriggered,
+  } = useCallStore();
   // State for callback dialog
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [callbackAt, setCallbackAt] = useState<Date | null>(null);
@@ -114,7 +121,9 @@ const ActiveCall = () => {
           {/* Dialog for call duration input */}
           <Dialog open={durationOpen} onClose={handleDurationCancel}>
             <DialogTitle>
-              <Typography color="primary">Введіть тривалість дзвінка (секунди)</Typography>
+              <Typography color="primary">
+                Введіть тривалість дзвінка (секунди)
+              </Typography>
             </DialogTitle>
             <DialogContent>
               <TextField
@@ -123,21 +132,33 @@ const ActiveCall = () => {
                 label="Тривалість (секунди)"
                 type="number"
                 value={duration}
-                onChange={e => setDuration(e.target.value.replace(/\D/, ''))}
+                onChange={(e) => setDuration(e.target.value.replace(/\D/, ''))}
                 fullWidth
                 error={!!duration && !isDurationValid}
-                helperText={!!duration && !isDurationValid ? 'Введіть додатне ціле число' : ''}
+                helperText={
+                  !!duration && !isDurationValid
+                    ? 'Введіть додатне ціле число'
+                    : ''
+                }
               />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleDurationCancel}>Скасувати</Button>
-              <Button onClick={handleDurationSave} variant="contained" disabled={!isDurationValid}>Зберегти</Button>
+              <Button
+                onClick={handleDurationSave}
+                variant="contained"
+                disabled={!isDurationValid}
+              >
+                Зберегти
+              </Button>
             </DialogActions>
           </Dialog>
           {/* Dialog for callback date/time */}
           <Dialog open={callbackOpen} onClose={handleCallbackCancel}>
             <DialogTitle>
-              <Typography color="primary">Виберіть дату і час для передзвону</Typography>
+              <Typography color="primary">
+                Виберіть дату і час для передзвону
+              </Typography>
             </DialogTitle>
             <DialogContent>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -145,19 +166,34 @@ const ActiveCall = () => {
                   value={callbackAt}
                   onChange={setCallbackAt}
                   minDateTime={minDate}
-                  slotProps={{ textField: { fullWidth: true, helperText: !isCallbackAtValid ? 'Дата має бути не раніше ніж через 2 години' : undefined } }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      helperText: !isCallbackAtValid
+                        ? 'Дата має бути не раніше ніж через 2 години'
+                        : undefined,
+                    },
+                  }}
                   ampm={false}
                 />
               </LocalizationProvider>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCallbackCancel}>Скасувати</Button>
-              <Button onClick={handleCallbackSave} variant="contained" disabled={!isCallbackAtValid}>Зберегти</Button>
+              <Button
+                onClick={handleCallbackSave}
+                variant="contained"
+                disabled={!isCallbackAtValid}
+              >
+                Зберегти
+              </Button>
             </DialogActions>
           </Dialog>
         </Paper>
       ) : isTriggered ? (
-        <Alert sx={{ mb: 2 }} severity="info">Відсутні контакти для дзвінка у черзі</Alert>
+        <Alert sx={{ mb: 2 }} severity="info">
+          Відсутні контакти для дзвінка у черзі
+        </Alert>
       ) : null}
       {!contact && (
         <Button

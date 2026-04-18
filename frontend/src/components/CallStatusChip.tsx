@@ -12,34 +12,46 @@ interface CallStatusChipProps {
   callbackAt?: Contact['callback_at'];
 }
 
-const CallStatusChip: React.FC<CallStatusChipProps> = ({ status, callbackAt }) => {
+const CallStatusChip: React.FC<CallStatusChipProps> = ({
+  status,
+  callbackAt,
+}) => {
   const getStatusLabel = (status: Contact['status']) => {
     switch (status) {
-      case 'new': return 'Новий';
-      case 'called': return 'Дзвонили';
-      case 'failed': return 'Невдало';
-      case 'callback': 
+      case 'new':
+        return 'Новий';
+      case 'called':
+        return 'Дзвонили';
+      case 'failed':
+        return 'Невдало';
+      case 'callback':
         return `Передзвонити ${callbackAt ? `(${dayjs.utc(callbackAt).local().format('DD.MM.YYYY HH:mm')})` : ''}`;
-      default: return status;
+      default:
+        return status;
     }
   };
 
   const getStatusColor = (status: Contact['status']) => {
     switch (status) {
-      case 'new': return 'primary';
-      case 'called': return 'success';
-      case 'failed': return 'error';
-      case 'callback': return 'warning';
-      default: return 'default';
+      case 'new':
+        return 'primary';
+      case 'called':
+        return 'success';
+      case 'failed':
+        return 'error';
+      case 'callback':
+        return 'warning';
+      default:
+        return 'default';
     }
   };
 
   return (
-      <Chip
-        label={getStatusLabel(status)}
-        color={getStatusColor(status) as any}
-        size="small"
-      />
+    <Chip
+      label={getStatusLabel(status)}
+      color={getStatusColor(status) as any}
+      size="small"
+    />
   );
 };
 

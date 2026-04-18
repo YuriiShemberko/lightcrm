@@ -11,8 +11,8 @@ const api = axios.create({
 
 // Redirect to login on 401 Unauthorized
 api.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response && error.response.status === 401) {
       useAuthStore.getState().logout();
     }

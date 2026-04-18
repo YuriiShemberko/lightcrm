@@ -38,7 +38,17 @@ const ContactsTableWrapper = ({
       <Alert
         severity="error"
         action={
-          <button onClick={reload} style={{ background: 'none', border: 'none', color: '#1976d2', cursor: 'pointer' }}>Спробувати знову</button>
+          <button
+            onClick={reload}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#1976d2',
+              cursor: 'pointer',
+            }}
+          >
+            Спробувати знову
+          </button>
         }
       >
         {error}
