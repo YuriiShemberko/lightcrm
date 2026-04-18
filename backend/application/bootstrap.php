@@ -132,9 +132,6 @@ Kohana::modules(array(
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
-// Environment variables
-require_once APPPATH.'classes/Config/EnvStorage.php';
-
 /**
  * Cookie Salt
  * @see  http://kohanaframework.org/3.3/guide/kohana/cookies
@@ -143,7 +140,7 @@ require_once APPPATH.'classes/Config/EnvStorage.php';
  * uncomment the line below and define a preferrably long salt.
  */
 
-Cookie::$salt = EnvStorage::instance()->get('COOKIE_SALT');
+Cookie::$salt = getenv('COOKIE_SALT');
 
 // Routes
 require APPPATH.'routes.php';

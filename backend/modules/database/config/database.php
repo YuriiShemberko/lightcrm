@@ -1,7 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-$env = EnvStorage::instance();
-
 return array
 (
 	'default' => array
@@ -20,10 +18,10 @@ return array
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
-			'hostname'   => $env->get('DB_HOST', 'db'),
-            'database'   => $env->get('DB_NAME', 'lightcrm'),
-            'username'   => $env->get('DB_USER', 'root'),
-            'password'   => $env->get('DB_PASS', 'root'),
+			'hostname'   => getenv('MYSQL_HOST'),
+            'database'   => getenv('MYSQL_DATABASE_NAME'),
+            'username'   => getenv('MYSQL_USER'),
+            'password'   => getenv('MYSQL_PASSWORD'),
             'persistent' => FALSE,
 		),
 		'table_prefix' => '',
