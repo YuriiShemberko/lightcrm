@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Typography, Button, Stack, Paper } from '@mui/material';
 import { useAuthStore } from '../store/useAuthStore';
 import ContactsList from '../components/ContactsList';
 import WorkModal from '../components/WorkModal';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const { user, logout } = useAuthStore();
   const [showWorkModal, setShowWorkModal] = useState(false);
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h4" gutterBottom>
+      <Paper sx={{ p: 3, mb: 3 }} elevation={2}>
+        <Typography variant="h4" gutterBottom align="center" sx={{ mb: 6 }}>
           Вітаємо в системі, {user?.login}!
         </Typography>
 

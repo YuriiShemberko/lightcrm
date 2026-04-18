@@ -9,6 +9,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import { validateName, validatePhone } from '../utils';
 
 interface NewContactModalProps {
   open: boolean;
@@ -32,19 +33,6 @@ const NewContactModal: React.FC<NewContactModalProps> = ({
       setPhone('');
     }
   }, [open]);
-
-  const validateName = (value: string) => {
-    if (!value.trim()) return 'Введіть імʼя';
-    if (value.trim().length < 3) return 'Імʼя має містити мінімум 3 символи';
-    if (!/^[а-яіїєґa-z\-\s']+$/i.test(value)) return 'Некоректне імʼя';
-    return null;
-  };
-  const validatePhone = (value: string) => {
-    if (!value.trim()) return 'Введіть номер телефону';
-    if (!/^\+?[\d\s\-\(\)]{10,15}$/.test(value))
-      return 'Некоректний номер (10-15 цифр)';
-    return null;
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

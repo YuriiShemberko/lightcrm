@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, Box, Tabs, Tab } from '@mui/material';
 import CallLogTable from './CallLogTable';
 import ActiveCall from './ActiveCall';
+import {
+  WORK_MODAL_TAB_ACTIVE_CALL,
+  WORK_MODAL_TAB_CALL_LOG,
+} from '../constants';
 
 interface WorkModalProps {
   open: boolean;
@@ -9,9 +13,7 @@ interface WorkModalProps {
 }
 
 const WorkModal: React.FC<WorkModalProps> = ({ open, onClose }) => {
-  const [tab, setTab] = useState(0);
-
-  // Передаємо tab і reload у CallLogTable для рефетчу при відкритті таби
+  const [tab, setTab] = useState(WORK_MODAL_TAB_ACTIVE_CALL);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -25,12 +27,12 @@ const WorkModal: React.FC<WorkModalProps> = ({ open, onClose }) => {
           <Tab label="Дзвінок" />
           <Tab label="Історія" />
         </Tabs>
-        {tab === 0 && (
+        {tab === WORK_MODAL_TAB_ACTIVE_CALL && (
           <Box>
             <ActiveCall />
           </Box>
         )}
-        {tab === 1 && (
+        {tab === WORK_MODAL_TAB_CALL_LOG && (
           <Box>
             <CallLogTable />
           </Box>

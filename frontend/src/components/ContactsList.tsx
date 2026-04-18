@@ -1,13 +1,12 @@
 import { Box, Button, Typography } from '@mui/material';
-import CallStatusChip from './CallStatusChip';
 import { useContactsStore } from '../store/useContactsStore';
 import ContactStatusSwitcher from './ContactStatusSwitcher';
 import NewContactModal from './NewContactModal';
 import { useState } from 'react';
-import { type NewContactData, type Contact } from '../types';
-import { type Column } from './ScrollableTable';
+import { type NewContactData } from '../types';
 import ContactsTableWrapper from './ContactsTableWrapper';
 import { usePolling } from '../hooks/usePolling';
+import { CONTACTS_REFRESH_INTERVAL } from '../constants';
 
 const ContactsScreen = () => {
   const {
@@ -24,47 +23,9 @@ const ContactsScreen = () => {
     reload,
   } = useContactsStore();
 
-  usePolling(reload, 30000);
+  usePolling(reload, CONTACTS_REFRESH_INTERVAL);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const columns: Column<Contact>[] = [
-    {
-      key: 'name',
-      label: "Ім'я",
-      render: (contact) => (
-        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-          {contact.name}
-        </Typography>
-      ),
-    },
-    {
-      key: 'phone',
-      label: 'Телефон',
-      render: (contact) => (
-        <Typography variant="body2">{contact.phone}</Typography>
-      ),
-    },
-    {
-      key: 'status',
-      label: 'Статус',
-      render: (contact) => (
-        <CallStatusChip
-          status={contact.status}
-          callbackAt={contact.callback_at}
-        />
-      ),
-    },
-    {
-      key: 'created_at',
-      label: 'Створено',
-      render: (contact) => (
-        <Typography variant="body2" color="text.secondary">
-          {new Date(contact.created_at).toLocaleDateString('uk-UA')}
-        </Typography>
-      ),
-    },
-  ];
 
   return (
     <>
@@ -81,7 +42,7 @@ const ContactsScreen = () => {
         <Typography color="primary" variant="h6" align="left">
           Контакти {total > 0 ? `(${total})` : ''}
           <Typography variant="body2" color="textSecondary">
-            Оновлюється кожні 30 секунд
+            Оновлюється кожні {CONTACTS_REFRESH_INTERVAL / 1000} секунд
           </Typography>
         </Typography>
         <Button onClick={() => setIsModalOpen(true)}>Додати контакт</Button>
@@ -95,7 +56,6 @@ const ContactsScreen = () => {
         isLoading={isLoading}
         error={error}
         reload={reload}
-        columns={columns}
         total={total}
         page={page}
         perPage={perPage}

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { type CallLog } from '../types';
 import { getCallLogs } from '../api/callLogs';
+import { CALL_LOG_PER_PAGE } from '../constants';
 
 interface CallLogsState {
   callLogs: CallLog[];
@@ -14,21 +15,22 @@ interface CallLogsState {
   reload: () => Promise<void>;
 }
 
-const PER_PAGE = 10;
-
 export const useCallLogsStore = create<CallLogsState>((set, get) => ({
   callLogs: [],
   isLoading: false,
   error: null,
   page: 1,
-  perPage: PER_PAGE,
+  perPage: CALL_LOG_PER_PAGE,
   total: 0,
 
   load: async (page = 1) => {
     set({ isLoading: true, error: null, page });
 
     try {
-      const { data, success, error } = await getCallLogs(page, PER_PAGE);
+      const { data, success, error } = await getCallLogs(
+        page,
+        CALL_LOG_PER_PAGE
+      );
       if (success && data) {
         set({
           callLogs: data.items,

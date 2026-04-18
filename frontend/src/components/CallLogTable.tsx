@@ -3,39 +3,7 @@ import { Chip, Typography } from '@mui/material';
 import { useCallLogsStore } from '../store/useCallLogsStore';
 import ScrollableTable, { type Column } from './ScrollableTable';
 import { type CallLog } from '../types';
-
-const getResultColor = (result: CallLog['result']) => {
-  switch (result) {
-    case 'answered':
-      return 'success';
-    case 'no_answer':
-      return 'warning';
-    case 'busy':
-      return 'error';
-    default:
-      return 'default';
-  }
-};
-
-const getResultLabel = (result: CallLog['result']) => {
-  switch (result) {
-    case 'answered':
-      return 'Відповів';
-    case 'no_answer':
-      return 'Не відповів';
-    case 'busy':
-      return 'Зайнято';
-    default:
-      return result;
-  }
-};
-
-const formatDuration = (seconds: number) => {
-  if (seconds === 0) return '—';
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${minutes}м ${secs}с`;
-};
+import { getResultColor, getResultLabel, formatDuration } from '../utils';
 
 const columns: Column<CallLog>[] = [
   {

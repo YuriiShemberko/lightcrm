@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { type Contact, type NewContactData } from '../types';
 import { getContacts, createContact } from '../api/contacts';
+import { CONTACTS_PER_PAGE } from '../constants';
 
 type ContactStatus = Contact['status'] | null;
 
@@ -18,8 +19,6 @@ interface ContactsState {
   reload: () => void;
 }
 
-const PER_PAGE = 10;
-
 export const useContactsStore = create<ContactsState>((set, get) => ({
   contacts: [],
   isLoading: false,
@@ -27,7 +26,7 @@ export const useContactsStore = create<ContactsState>((set, get) => ({
   filterStatus: null,
   error: null,
   page: 1,
-  perPage: PER_PAGE,
+  perPage: CONTACTS_PER_PAGE,
   changeFilterStatus: (status) => {
     (set({ filterStatus: status }), get().reload());
   },

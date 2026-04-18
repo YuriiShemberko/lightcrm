@@ -9,14 +9,13 @@ interface AuthState {
   login: (userData: User) => void;
   logout: () => void;
   username: string;
-  setUsername: (v: string) => void;
+  setUsername: (userName: string) => void;
   password: string;
-  setPassword: (v: string) => void;
+  setPassword: (password: string) => void;
   error: string | null;
-  setError: (v: string | null) => void;
+  setError: (error: string | null) => void;
   loading: boolean;
-  setLoading: (v: boolean) => void;
-  handleLogin: () => Promise<{ success: boolean; error?: string }>; // навігацію робити у компоненті
+  handleLogin: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -37,41 +36,39 @@ export const useAuthStore = create<AuthState>()(
         });
       },
       username: '',
-      setUsername: (v) => set({ username: v }),
+      setUsername: (userName: string) => set({ username: userName }),
       password: '',
-      setPassword: (v) => set({ password: v }),
+      setPassword: (password: string) => set({ password }),
       error: null,
-      setError: (v) => set({ error: v }),
+      setError: (error: string | null) => set({ error }),
       loading: false,
-      setLoading: (v) => set({ loading: v }),
       handleLogin: async () => {
         set({ error: null, loading: true });
         const { username, password, login } = get();
         try {
           const response = await loginApi(username, password);
-          if (response.success) {
+          if (response.success && response.data) {
             login(response.data);
-            return { success: true };
           } else {
             set({ error: response.error || 'Невірні дані' });
-            return { success: false, error: response.error };
           }
         } catch (err: any) {
           if (err.status === 401) {
             set({ error: 'Невірні дані' });
-            return { success: false, error: 'Невірні дані' };
           } else {
             set({ error: 'Сервер не відповідає' });
-            return { success: false, error: 'Сервер не відповідає' };
           }
         } finally {
-          set({ loading: false });
+          set({ loading: false, username: '', password: '' });
         }
       },
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );

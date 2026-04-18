@@ -1,26 +1,64 @@
-import { Box, CircularProgress, Alert } from '@mui/material';
+import { Box, CircularProgress, Alert, Typography } from '@mui/material';
 import ContactsEmptyState from './ContactsEmptyState';
 import ScrollableTable, { type Column } from './ScrollableTable';
 import { type Contact } from '../types';
+import CallStatusChip from './CallStatusChip';
+import { fromSqlDateTime } from '../utils';
 
 interface Props {
   contacts: Contact[];
   isLoading: boolean;
   error: string | null;
   reload: () => void;
-  columns: Column<Contact>[];
   total: number;
   page: number;
   perPage: number;
   changePage: (page: number) => void;
 }
 
+const columns: Column<Contact>[] = [
+  {
+    key: 'name',
+    label: "Ім'я",
+    render: (contact) => (
+      <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+        {contact.name}
+      </Typography>
+    ),
+  },
+  {
+    key: 'phone',
+    label: 'Телефон',
+    render: (contact) => (
+      <Typography variant="body2">{contact.phone}</Typography>
+    ),
+  },
+  {
+    key: 'status',
+    label: 'Статус',
+    render: (contact) => (
+      <CallStatusChip
+        status={contact.status}
+        callbackAt={contact.callback_at}
+      />
+    ),
+  },
+  {
+    key: 'created_at',
+    label: 'Створено',
+    render: (contact) => (
+      <Typography variant="body2" color="text.secondary">
+        {fromSqlDateTime(contact.created_at)}
+      </Typography>
+    ),
+  },
+];
+
 const ContactsTableWrapper = ({
   contacts,
   isLoading,
   error,
   reload,
-  columns,
   total,
   page,
   perPage,

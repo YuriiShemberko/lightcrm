@@ -4,10 +4,7 @@ import { getNextContact } from '../api/contacts';
 import { type CallLog } from '../types';
 import { createCallLog } from '../api/callLogs';
 import { updateContactStatus } from '../api/contacts';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
+import { callStatusToContactStatus, toSqlDateTime } from '../utils';
 
 interface CallStoreState {
   activeContact: Contact | null;
@@ -68,15 +65,9 @@ export const useCallStore = create<CallStoreState>((set, get) => ({
         duration_sec: durationSec,
       });
 
-      const contactStatus =
-        status === 'no_answer'
-          ? 'failed'
-          : status === 'busy'
-            ? 'callback'
-            : 'called';
-
+      const contactStatus = callStatusToContactStatus(status);
       const callbackAtSqlFormat = callbackAt
-        ? dayjs(callbackAt).utc().format('YYYY-MM-DD HH:mm:ss')
+        ? toSqlDateTime(callbackAt)
         : undefined;
 
       await updateContactStatus(

@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
-import { useLogin } from '../hooks/useLogin';
+import { useAuthStore } from '../store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const {
@@ -19,8 +20,20 @@ const LoginPage = () => {
     setPassword,
     error,
     loading,
-    handleSubmit,
-  } = useLogin();
+    handleLogin,
+  } = useAuthStore();
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await handleLogin();
+
+    const success = useAuthStore.getState().isAuthenticated;
+    if (success) {
+      navigate('/dashboard');
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
