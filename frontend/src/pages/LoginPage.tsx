@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Container,
   Box,
@@ -12,7 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import { useLogin } from '../hooks/useLogin';
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const {
     username,
     setUsername,

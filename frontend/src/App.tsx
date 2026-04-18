@@ -5,9 +5,6 @@ import { useAuthStore } from './store/useAuthStore';
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
-  console.log('isAuthenticated:', isAuthenticated);
-
   return (
     <BrowserRouter>
       <Routes>
