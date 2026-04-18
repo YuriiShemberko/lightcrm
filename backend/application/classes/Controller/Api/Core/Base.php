@@ -1,6 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-abstract class Controller_Api_Core_Base extends Controller {
+defined('SYSPATH') or die('No direct script access.');
+
+abstract class Controller_Api_Core_Base extends Controller
+{
     protected function sendResponse($status, $data)
     {
         $this->response

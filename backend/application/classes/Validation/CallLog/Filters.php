@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 const CALL_RESULT_SUCCESS = 'success';
 const CALL_RESULT_FAILED = 'failed';
@@ -12,9 +14,10 @@ const VALID_CALL_RESULTS = [
     CALL_RESULT_BUSY
 ];
 
-class Validation_CallLog_Filters {
-
-    public static function validateResult($result) {
+class Validation_CallLog_Filters
+{
+    public static function validateResult($result)
+    {
         $valid_results = VALID_CALL_RESULTS;
         if (!in_array($result, $valid_results)) {
             throw new Kohana_Exception("Invalid call result", null, 400);

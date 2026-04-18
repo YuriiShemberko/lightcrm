@@ -1,6 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Service_ContactNext {
+defined('SYSPATH') or die('No direct script access.');
+
+class Service_ContactNext
+{
     public static function getNextContact()
     {
         // First try to get a callback contact with past callback_at timestamp

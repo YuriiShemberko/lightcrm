@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-abstract class Controller_Api_Core_Authorized extends Controller_Api_Core_Base {
+defined('SYSPATH') or die('No direct script access.');
 
+abstract class Controller_Api_Core_Authorized extends Controller_Api_Core_Base
+{
     public function before()
     {
         parent::before();

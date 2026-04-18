@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Validation_Pagination {
+defined('SYSPATH') or die('No direct script access.');
 
+class Validation_Pagination
+{
     public static function validate(array $params)
     {
         $v = Validation::factory($params)

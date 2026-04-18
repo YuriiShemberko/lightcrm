@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Controller_Api_Contacts extends Controller_Api_Core_Rest {
+defined('SYSPATH') or die('No direct script access.');
 
+class Controller_Api_Contacts extends Controller_Api_Core_Rest
+{
     public function action_get()
     {
         try {
@@ -11,7 +13,7 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
                 $pagination,
                 $filters,
             );
-            
+
             return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
@@ -26,7 +28,7 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
 
         } catch (Kohana_Exception $e) {
             return $this->sendResponse($e->getCode(), [
-                'success' => false, 
+                'success' => false,
                 'errors'  => $e->getMessage()
             ]);
         }
@@ -38,12 +40,12 @@ class Controller_Api_Contacts extends Controller_Api_Core_Rest {
             $data = json_decode($this->request->body(), true);
             $validated = Validation_Contact_Params::validate($data);
             $new_id = ORM::factory('Contact')->createContact($validated['name'], $validated['phone']);
-            
+
             return $this->sendResponse(201, ['success' => true, 'id' => $new_id]);
 
         } catch (Kohana_Exception $e) {
             return $this->sendResponse($e->getCode(), [
-                'success' => false, 
+                'success' => false,
                 'errors'  => $e->getMessage()
             ]);
         }

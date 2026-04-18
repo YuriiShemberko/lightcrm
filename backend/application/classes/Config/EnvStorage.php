@@ -1,9 +1,11 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 // Class responsible for loading environment variables from the env.php file
 
-class EnvStorage {
-
+class EnvStorage
+{
     private static $_instance;
     private $_data = [];
 
@@ -15,17 +17,19 @@ class EnvStorage {
         }
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     public static function instance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new self();
         }
         return self::$_instance;
     }
 
-    public function get($key, $default = NULL)
+    public function get($key, $default = null)
     {
         return isset($this->_data[$key]) ? $this->_data[$key] : $default;
     }

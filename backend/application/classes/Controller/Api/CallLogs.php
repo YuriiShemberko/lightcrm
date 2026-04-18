@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Api_CallLogs extends Controller_Api_Core_Rest
 {
@@ -11,7 +13,7 @@ class Controller_Api_CallLogs extends Controller_Api_Core_Rest
                 $pagination,
                 $filters,
             );
-            
+
             return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
@@ -36,7 +38,7 @@ class Controller_Api_CallLogs extends Controller_Api_Core_Rest
 
             $call_log = ORM::factory('CallLog');
             $id = $call_log->add_log($call_log_params['contact_id'], $call_log_params['result'], $call_log_params['duration_sec']);
-            
+
             return $this->sendResponse(201, ['success' => true, 'id' => $id]);
         } catch (Kohana_Exception $e) {
             return $this->sendResponse($e->getCode(), ['errors' => $e->getMessage()]);

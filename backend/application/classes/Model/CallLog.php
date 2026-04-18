@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Model_CallLog extends ORM {
+defined('SYSPATH') or die('No direct script access.');
 
+class Model_CallLog extends ORM
+{
     protected $_table_name = 'call_log';
 
     protected $_belongs_to = array(
@@ -17,7 +19,7 @@ class Model_CallLog extends ORM {
         $this->result     = $result;
         $this->duration_sec = $duration;
         $this->save();
-        
+
         return $this->id;
     }
 

@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 const CALL_RESULT_ANSWERED = 'answered';
 const CALL_RESULT_NO_ANSWER = 'no_answer';
@@ -6,8 +8,8 @@ const CALL_RESULT_BUSY = 'busy';
 
 const VALID_CALL_RESULTS = [CALL_RESULT_ANSWERED, CALL_RESULT_NO_ANSWER, CALL_RESULT_BUSY];
 
-class Validation_CallLog_Params {
-
+class Validation_CallLog_Params
+{
     public static function validate(array $params)
     {
         $v = Validation::factory($params)

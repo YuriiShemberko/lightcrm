@@ -1,6 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Service_Auth {
+defined('SYSPATH') or die('No direct script access.');
+
+class Service_Auth
+{
     public static function login($login_params)
     {
         $login = $login_params['login'];
@@ -46,8 +49,8 @@ class Service_Auth {
         $user_id = $session->get('user_id');
         if ($user_id) {
             return Model::factory('User')->getById($user_id);
-        } 
-        
+        }
+
         throw new Kohana_Exception('Not authenticated', null, 401);
     }
 

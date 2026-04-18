@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Validation_Auth_Params {
+defined('SYSPATH') or die('No direct script access.');
 
+class Validation_Auth_Params
+{
     public static function validate($params)
     {
         if (!$params) {

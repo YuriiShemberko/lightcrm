@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-class Controller_Api_Auth extends Controller_Api_Core_Base {
+defined('SYSPATH') or die('No direct script access.');
 
+class Controller_Api_Auth extends Controller_Api_Core_Base
+{
     /**
      * POST /api/auth/login
      * Accepts login and password, creates a session
@@ -10,9 +12,9 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
     {
         try {
             Validation_RequestMethod::validate($this->request->method(), ['POST']);
-            
+
             $data = json_decode($this->request->body(), true);
-            
+
             $login_params = Validation_Auth_Params::validate($data);
 
             Service_Auth::alreadyLoggedInGuard();
@@ -46,7 +48,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
                 'success' => true,
                 'message' => 'Logged out successfully'
             ]);
-        
+
         } catch (Kohana_Exception $e) {
             return $this->sendResponse($e->getCode(), array('error' => $e->getMessage()));
         }
@@ -60,7 +62,7 @@ class Controller_Api_Auth extends Controller_Api_Core_Base {
     {
         try {
             $user = Service_Auth::getCurrentUser();
-    
+
             return $this->sendResponse(200, [
                 'success' => true,
                 'data' => [
