@@ -1,4 +1,4 @@
-import { MIN_CALLBACK_HOURS } from './constants';
+import { MIN_CALLBACK_MINUTES } from './constants';
 import type { CallLog, Contact } from './types';
 
 import dayjs from 'dayjs';
@@ -9,7 +9,7 @@ dayjs.extend(utc);
 // Функція для отримання мінімальної дати для перезвону
 export const getMinCallbackDate = (): Date => {
   const d = new Date();
-  d.setHours(d.getHours() + MIN_CALLBACK_HOURS);
+  d.setMinutes(d.getMinutes() + MIN_CALLBACK_MINUTES);
   return d;
 };
 
@@ -80,9 +80,9 @@ export const getResultColor = (result: CallLog['result']) => {
     case 'answered':
       return 'success';
     case 'no_answer':
-      return 'warning';
-    case 'busy':
       return 'error';
+    case 'busy':
+      return 'warning';
     default:
       return 'default';
   }

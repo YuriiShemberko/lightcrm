@@ -14,7 +14,7 @@ interface CallbackDialogProps {
   open: boolean;
   callbackAt: Date | null;
   minDate: Date;
-  minCallbackHours: number;
+  minCallbackMinutes: number;
   isValid: boolean;
   onChange: (date: Date | null) => void;
   onSave: () => void;
@@ -29,7 +29,7 @@ export const CallbackDialog = ({
   onChange,
   onSave,
   onCancel,
-  minCallbackHours,
+  minCallbackMinutes,
 }: CallbackDialogProps) => (
   <Dialog open={open} onClose={onCancel}>
     <DialogTitle>
@@ -47,7 +47,7 @@ export const CallbackDialog = ({
             textField: {
               fullWidth: true,
               helperText: !isValid
-                ? `Дата має бути не раніше ніж через ${minCallbackHours} годин`
+                ? `Дата має бути не раніше ніж через ${minCallbackMinutes} хвилин`
                 : undefined,
             },
           }}

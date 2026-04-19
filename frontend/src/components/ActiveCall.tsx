@@ -7,7 +7,7 @@ import { CallbackDialog } from './CallbackDialog';
 import { CallError } from './CallError';
 import { CallLoader } from './CallLoader';
 import { CallEmptyState } from './CallEmptyState';
-import { MIN_CALLBACK_HOURS } from '../constants';
+import { MIN_CALLBACK_MINUTES } from '../constants';
 
 const ActiveCall = () => {
   const {
@@ -59,7 +59,7 @@ const ActiveCall = () => {
             callbackAt={callbackAt}
             minDate={minDate}
             isValid={!!isCallbackAtValid}
-            minCallbackHours={MIN_CALLBACK_HOURS}
+            minCallbackMinutes={MIN_CALLBACK_MINUTES}
             onChange={setCallbackAt}
             onSave={handleCallbackSave}
             onCancel={handleCallbackCancel}

@@ -21,7 +21,7 @@ export const useActiveCallState = () => {
   const durationValue = Number(duration);
   const isDurationValid = Number.isInteger(durationValue) && durationValue > 0;
 
-  // Мінімальна дата для перезвону: зараз + 2 години
+  // Мінімальна дата для перезвону: зараз + 2 хвилини
   const minDate = useMemo(getMinCallbackDate, []);
 
   // Валідація: callbackAt має бути не раніше minDate
