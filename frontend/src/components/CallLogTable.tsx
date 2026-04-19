@@ -3,7 +3,7 @@ import { Chip, Typography } from '@mui/material';
 import { useCallLogsStore } from '../store/useCallLogsStore';
 import ScrollableTable, { type Column } from './ScrollableTable';
 import { type CallLog } from '../types';
-import { getResultColor, getResultLabel, formatDuration } from '../utils';
+import { getResultColor, getResultLabel, formatDuration, fromSqlDateTime } from '../utils';
 
 const columns: Column<CallLog>[] = [
   {
@@ -18,7 +18,7 @@ const columns: Column<CallLog>[] = [
     label: 'Дата та час',
     render: (log) => (
       <Typography variant="body2">
-        {new Date(log.called_at).toLocaleString('uk-UA')}
+        {fromSqlDateTime(log.called_at)}
       </Typography>
     ),
   },

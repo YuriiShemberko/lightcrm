@@ -23,5 +23,24 @@ CREATE TABLE IF NOT EXISTS `call_log` (
   INDEX `idx_contact_id` (`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Seed data
+-- Admin user
 INSERT INTO `users` (`login`, `password`) 
 VALUES ('admin', '$2y$10$i70PMQs.Dxpg8bTqw01NKOJsf6yy79Gl6VMOGr44J.CJ56XDlZw96');
+
+-- Seed contacts
+INSERT INTO `contacts` (`name`, `phone`, `status`, `callback_at`) VALUES 
+('Олександр Коваленко', '+380671112233', 'new', NULL),
+('Марія Петренко', '+380504445566', 'callback', DATE_ADD(NOW(), INTERVAL 1 MINUTE)),
+('Дмитро Сидоренко', '+380937778899', 'called', NULL),
+('Олена Бондаренко', '+380689990011', 'failed', NULL);
+
+-- Seed call logs
+-- Для Дмитра (id: 3)
+INSERT INTO `call_log` (`contact_id`, `duration_sec`, `result`) VALUES 
+(3, 45, 'answered'),
+(3, 0, 'busy');
+
+-- Для Олени (id: 4)
+INSERT INTO `call_log` (`contact_id`, `duration_sec`, `result`) VALUES 
+(4, 0, 'no_answer');
